@@ -24,3 +24,12 @@ Para finalizar se debe ingresar a http://localhost:3000
 - Flores Zamora Ithan Adrián
 - Gutiérrez Villalobos José Alfredo
 - Nápoles Munguía José de Jesús
+
+
+## Migraciones
+
+### Lighthouse testing in /
+![alt text](./assets/img/readme/image.png)
+
+### Lighthouse testing in /session/IniciarSesion
+![alt text](./assets/img/readme/image-1.png)

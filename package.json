@@ -1,20 +1,56 @@
 {
   "name": "plantmatica",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.8",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ng": "bunx --bun ng",
+    "start": "bunx --bun ng serve",
+    "build": "bunx --bun ng build",
+    "watch": "bunx --bun ng build --watch --configuration development -o",
+    "test": "bunx --bun ng test",
+    "serve:ssr:plantmatica-template": "node dist/plantmatica/server/server.mjs"
   },
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ThinKreations/PlantMatica.git"
+    "url": "git+https://github.com/SergioMainJG/plantMatica-frontend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ThinKreations/PlantMatica/issues"
+    "url": "https://github.com/SergioMainJG/plantMatica-frontend/issues"
   },
-  "homepage": "https://github.com/ThinKreations/PlantMatica#readme"
+  "homepage": "https://github.com/SergioMainJG/plantMatica-frontend#readme",
+  "packageManager": "pnpm@11.7.0",
+  "dependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@angular/platform-server": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@angular/ssr": "^22.0.0",
+    "daisyui": "^5.5.23",
+    "express": "^5.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.0",
+    "@angular/cli": "^22.0.0",
+    "@angular/compiler-cli": "^22.0.0",
+    "@tailwindcss/postcss": "^4.3.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
+    "jsdom": "^28.0.0",
+    "postcss": "^8.5.15",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.3.1",
+    "typescript": "~6.0.2",
+    "vitest": "^4.0.8"
+  },
+  "engines": {
+    "bun": ">=1.3.14"
+  }
 }

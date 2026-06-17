@@ -8,23 +8,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.6.0",
-    "@emotion/styled": "^11.6.0",
-    "@hookform/resolvers": "^2.8.3",
-    "@mui/icons-material": "^5.1.0",
-    "@mui/material": "^5.1.0",
-    "animate.css": "^4.1.1",
-    "next": "^12.0.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.19.5",
-    "sweetalert": "^2.1.2",
-    "sweetalert2": "^11.4.14",
-    "tiny-uid": "^1.1.1",
-    "yup": "^0.32.11"
+    "@emotion/react": "11.6.0",
+    "@emotion/styled": "11.6.0",
+    "@hookform/resolvers": "2.8.3",
+    "@mui/icons-material": "5.1.0",
+    "@mui/material": "5.1.0",
+    "animate.css": "4.1.1",
+    "next": "12.0.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hook-form": "7.19.5",
+    "sweetalert": "2.1.2",
+    "sweetalert2": "11.4.14",
+    "tiny-uid": "1.1.1",
+    "yup": "0.32.11"
   },
   "devDependencies": {
-    "@types/yup": "^0.29.13",
+    "@types/yup": "0.29.13",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.3"
   }
