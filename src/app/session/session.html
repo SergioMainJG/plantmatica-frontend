@@ -1,1 +1,87 @@
-<p>session works!</p>
+<section class="flex flex-col w-full h-full place-items-center justify-center gap-10">
+  <header class="mt-30 flex flex-col place-items-center gap-7">
+    <h2 class="text-3xl text-lime-600 font-bold">Iniciar sesión PlantMatica.</h2>
+    <aside class="relative block aspect-9/16 h-30">
+      <image-optimized
+        [classStyle]="'object-cover'"
+        [ngSrc]="plantmaticaLogo.src"
+        [titleAlt]="plantmaticaLogo.alt"
+      />
+    </aside>
+  </header>
+
+  <article class="w-full flex-col place-items-center">
+    <form class="w-full flex flex-col place-items-center" (submit)="onSubmit($event)">
+      <fieldset class="fieldset rounded-box w-xl p-4">
+        <legend class="fieldset-legend text-[rgb(88,206,3)] text-2xl">Login</legend>
+
+        <label for="emailOrUsername" class="label text-[rgb(88,206,3)] text-xl"
+          >Your Email or Username</label
+        >
+        <input
+          id="emailOrUsername"
+          type="text"
+          class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] shadow-none bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200 focus:ring-0 focus:outline-none"
+          placeholder="user@example.com"
+          autocomplete="username"
+          #emailOrUsername
+          [formField]="loginForm.emailOrUsername"
+        />
+
+        <label for="password" class="label text-[rgb(88,206,3)] text-xl">Your Password</label>
+        <div class="relative w-full">
+          <input
+            id="password"
+            [type]="isPasswordHidden() ? 'password' : 'text'"
+            class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200"
+            placeholder="••••••••"
+            hap
+            autocomplete="current-password"
+            #password
+            [formField]="loginForm.password"
+          />
+          <section
+            class="tooltip tooltip-right tooltip-warning"
+            [attr.data-tip]="togglePasswordState()"
+          >
+            <button
+              type="button"
+              (click)="togglePassword()"
+              class="absolute right-2 top-1/2 -translate-y-2/3 btn btn- btn-sm btn-circles"
+              title="Mostrar contraseña"
+            >
+              @if (isPasswordHidden()) {
+                <svg class="rounded-4xl aspect-square w-8 fill-white-100" lucideEyeOff />
+              } @else {
+                <svg class="rounded-4xl aspect-square w-8 fill-white-100" lucideEye />
+              }
+            </button>
+          </section>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-wide text-lg border-[rgba(99,164,63,0.9)] bg-[rgba(99,164,63,0.9)] transition-all duration-400 hover:scale-120 hover:bg-[rgb(98,186,13)]"
+        >
+          Iniciar Sesión
+        </button>
+      </fieldset>
+    </form>
+  </article>
+
+  <footer class="flex flex-col w-full h-full place-items-center justify-center gap-5">
+    <button
+      type="button"
+      class="btn btn-ghost btn-link text-slate-800 transition-all duration-500 hover:scale-125 hover:text-[rgb(98,186,13)]"
+    >
+      ¿Olvidaste tu contraseña?, haz click aquí.
+    </button>
+
+    <button
+      [disabled]="loginForm().invalid()"
+      type="submit"
+      class="btn btn-ghost btn-link text-slate-800 transition-all duration-500 hover:scale-125 hover:text-[rgb(98,186,13)]"
+    >
+      Si no posees una cuenta puedes crear una haciendo click aqui.
+    </button>
+  </footer>
+</section>

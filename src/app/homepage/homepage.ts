@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { imagesShared } from '../shared/images.shared';
+import Image from '../shared/components/image/image';
 
 @Component({
   selector: 'app-homepage',
-  imports: [],
+  imports: [RouterLink, Image],
   templateUrl: './homepage.html',
-  styles: ``,
 })
-export default class Homepage { }
+export default class Homepage {
+  plantmaticaLogo = imagesShared['plantmaticaImage'];
+}

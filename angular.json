@@ -41,9 +41,7 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              "src/assets/images/logo-white.png",
-              "src/assets/images/bg-navbar.jpg"
+              }
             ],
             "styles": ["src/styles.css"],
             "server": "src/main.server.ts",
@@ -95,7 +93,10 @@
               "buildTarget": "plantmatica-template:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

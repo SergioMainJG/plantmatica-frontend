@@ -1,0 +1,31 @@
+<footer
+  class="relative w-full h-21 footer sm:footer-horizontal flex place-content-between bg-cover bg-origin-border bg-center bg-[url(/assets/images/bg-navbar.jpg)] px-5"
+>
+  <div
+    class="absolute inset-0 bg-linear-to-t from-[rgba(99,164,63,0.9)] to-[rgba(90,149,57,0.85)]"
+  ></div>
+
+  <aside class="relative z-10 h-full flex-col content-center">
+    <p class="font-bold text-3xl">© {{ currentYear() }} Tucan's Software</p>
+  </aside>
+
+  <aside class="relative z-10 h-full flex-col content-center">
+    <button class="btn btn-link w-full h-full">
+      <a
+        class="aspect-square h-6"
+        ñ
+        [href]="githubFrontUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        referrerpolicy="no-referrer"
+      >
+        <image-optimized
+          [classStyle]="'object-contain'"
+          [ngSrc]="githubImage.src"
+          [titleAlt]="githubImage.alt"
+          [isPriorityLoad]="true"
+        />
+      </a>
+    </button>
+  </aside>
+</footer>

@@ -1,0 +1,29 @@
+<header
+  class="relative w-full h-30 bg-cover bg-origin-border bg-center bg-[url(/assets/images/bg-navbar.jpg)]"
+>
+  <div
+    class="absolute inset-0 bg-linear-to-t from-[rgba(99,164,63,0.9)] to-[rgba(90,149,57,0.85)]"
+  ></div>
+
+  <nav class="relative z-10 navbar justify-center h-full">
+    <section class="tooltip tooltip-bottom" [attr.data-tip]="toHomepageTitle">
+      <a
+        routerLink="/"
+        class="relative block aspect-video h-30 btn btn-link bg-transparent border-0 text-xl w-fit shadow-none"
+        [title]="toHomepageTitle"
+      >
+        <!-- <img
+          class="object-contain aspect-video h-30"
+          alt="Tucan's Software Logo"
+          [src]="logoWhiteImage"
+        /> -->
+        <image-optimized
+          [classStyle]="'object-contain'"
+          [ngSrc]="logoWhiteImage.src"
+          [titleAlt]="logoWhiteImage.alt"
+          [isPriorityLoad]="true"
+        />
+      </a>
+    </section>
+  </nav>
+</header>
