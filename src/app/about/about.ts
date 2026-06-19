@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-about',
   imports: [],
-  templateUrl: './user.html',
+  templateUrl: './about.html',
   styles: ``,
 })
-export default class User { }
+export default class About {}

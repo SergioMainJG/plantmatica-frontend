@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-cards',
   imports: [],
-  templateUrl: './user.html',
+  templateUrl: './cards.html',
   styles: ``,
 })
-export default class User { }
+export default class Cards { }

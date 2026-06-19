@@ -5,8 +5,13 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('plantmatica-template');
+
+  basePathImages = `src/assets/images`;
+  bgNavbarImage = `${this.basePathImages}/bg-navbar.jpg`;
+  logoWhiteImage = `${this.basePathImages}/logo-white.jpg`;
+
+  currentYear = signal(new Date().getFullYear());
 }

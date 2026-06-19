@@ -10,23 +10,22 @@
     "plantmatica-template": {
       "projectType": "application",
       "schematics": {
-        "schematics": {
-          "@schematics/angular:component": {
-            "skipTests": true,
-            "inlineStyle": true
-          },
-          "@schematics/angular:class": {
-            "skipTests": true
-          },
-          "@schematics/angular:directive": {
-            "skipTests": true
-          },
-          "@schematics/angular:service": {
-            "skipTests": true
-          },
-          "@schematics/angular:pipe": {
-            "skipTests": true
-          }
+        "@schematics/angular:component": {
+          "skipTests": true,
+          "inlineStyle": true,
+          "exportDefault": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
         }
       },
       "root": "",
@@ -42,11 +41,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets/images/logo-white.png",
+              "src/assets/images/bg-navbar.jpg"
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -75,7 +74,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"

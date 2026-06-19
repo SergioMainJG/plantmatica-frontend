@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-not-found',
   imports: [],
-  templateUrl: './user.html',
+  templateUrl: './not-found.html',
   styles: ``,
 })
-export default class User { }
+export class NotFound {}
