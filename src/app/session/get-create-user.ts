@@ -1,7 +1,24 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { Temporal } from 'temporal-polyfill';
+
+interface SignupFormModel {
+  birthdate: string;
+  email: string;
+  gender: string;
+  name: string;
+  password: string;
+  repeatedPassword: string;
+  residenceStateMexico: string;
+  tracking: {
+    isAgeAllowed: boolean;
+    isStateAllowed: boolean;
+    isGenderAllowed: boolean;
+    isMarketingAllowed: boolean;
+    isAdsAllowed: boolean;
+  }
+}
 
 @Service()
 export default class GetAndCreateUser {
@@ -16,7 +33,14 @@ export default class GetAndCreateUser {
     return firstValueFrom(req);
   }
 
-  public readonly signUpUser = () => {
-    throw new Error(`Method not implemented yet`);
+  public readonly signUpUser = (userData: SignupFormModel) => {
+    const req = this.http.post('/users/register', {
+      birthdate: Temporal.PlainDate.from(userData.birthdate),
+      email: userData.email,
+      gender: userData.gender,
+      name: userData.name,
+      password: userData.password,
+      residenceState: userData.residenceStateMexico,
+    })
   }
 }

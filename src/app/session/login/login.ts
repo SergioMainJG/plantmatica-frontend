@@ -1,8 +1,9 @@
 import { Component, injectAsync, linkedSignal, signal } from '@angular/core';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { imagesShared } from '../shared/images.shared';
 import { LucideEye, LucideEyeOff } from '@lucide/angular';
-import Image from '../shared/components/image/image';
+import { imagesShared } from '../../shared/images.shared';
+import Image from '../../shared/components/image/image';
+import { RouterLink } from '@angular/router';
 
 interface LoginFormModel {
   emailOrUsername: string;
@@ -10,12 +11,12 @@ interface LoginFormModel {
 }
 
 @Component({
-  selector: 'app-session',
-  imports: [FormField, Image, LucideEyeOff, LucideEye],
-  templateUrl: './session.html',
+  selector: 'session-login',
+  imports: [FormField, Image, LucideEyeOff, LucideEye, RouterLink],
+  templateUrl: './login.html',
 })
-export default class Session {
-  private readonly getAndCreateUser = injectAsync(() => import('./get-create-user'));
+export default class Login {
+  private readonly getAndCreateUser = injectAsync(() => import('../get-create-user'));
   private async loginUser(credentials: string, password: string) {
     const service = await this.getAndCreateUser();
     return service.loginUser(credentials, password);
