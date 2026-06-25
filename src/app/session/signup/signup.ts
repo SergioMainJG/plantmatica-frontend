@@ -1,71 +1,12 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, injectAsync, linkedSignal, signal, WritableSignal } from '@angular/core';
-import { form, FormField, pattern, required, submit, validate } from '@angular/forms/signals';
-import { RouterLink } from '@angular/router';
-import { Temporal } from "temporal-polyfill";
+import { form, FormField, pattern, required, submit, validate, minLength, maxLength } from '@angular/forms/signals';
+import { RouterLink, Router } from '@angular/router';
 import { LucideEye, LucideEyeOff } from '@lucide/angular';
+import { Temporal } from "temporal-polyfill";
 import Image from '../../shared/components/image/image';
 import { imagesShared } from '../../shared/images.shared';
-import { TitleCasePipe } from '@angular/common';
 import { TranslateGenderPipe } from '../../../pipes/translate-gender-pipe';
-
-export const MEXICO_STATES = {
-  outside: "Resido fuera del pais",
-  aguascalientes: "Aguascalientes",
-  bajaCalifornia: "Baja California",
-  bajaCaliforniaSur: "Baja California Sur",
-  campeche: "Campeche",
-  chiapas: "Chiapas",
-  chihuahua: "Chihuahua",
-  coahuila: "Coahuila de Zaragoza",
-  colima: "Colima",
-  cdmx: "CDMX",
-  durango: "Durango",
-  guanajuato: "Guanajuato",
-  guerrero: "Guerrero",
-  hidalgo: "Hidalgo",
-  jalisco: "Jalisco",
-  estado: "Estado de Mexico",
-  michoacan: "Michoacan de Ocampo",
-  morelos: "Morelos",
-  nayarit: "Nayarit",
-  nuevo: "Nuevo Leon",
-  oaxaca: "Oaxaca",
-  puebla: "Puebla",
-  queretaro: "Queretaro de Arteaga",
-  quintana: "Quintana Roo",
-  sanLuisPotosi: "San Luis Potosi",
-  sinaloa: "Sinaloa",
-  sonora: "Sonora",
-  tabasco: "Tabasco",
-  tamaulipas: "Tamaulipas",
-  tlaxcala: "Tlaxcala",
-  veracruz: "Veracruz de Ignacio de la Llave",
-  yucatan: "Yucatan",
-  zacatecas: "Zacatecas",
-} as const;
-
-export const GENDERS = {
-  male: "Male",
-  female: "Female",
-  unknown: "I prefer not comment about it",
-} as const;
-
-interface SignupFormModel {
-  birthdate: string;
-  email: string;
-  gender: string;
-  name: string;
-  password: string;
-  repeatedPassword: string;
-  residenceStateMexico: string;
-  tracking: {
-    isAgeAllowed: boolean;
-    isStateAllowed: boolean;
-    isGenderAllowed: boolean;
-    isMarketingAllowed: boolean;
-    isAdsAllowed: boolean;
-  }
-}
 
 @Component({
   selector: 'session-login',
@@ -88,16 +29,18 @@ export default class Signup {
     residenceStateMexico: 'Selecciona un estado',
     gender: 'Selecciona un género',
     birthdate: '2000-01-01',
-    tracking: {
+    
       isAgeAllowed: false,
       isStateAllowed: false,
       isGenderAllowed: false,
       isMarketingAllowed: false,
       isAdsAllowed: false
-    }
+  
   });
   protected readonly signupForm = form(this.signupModel, (schemaPath) => {
     required(schemaPath.name, { message: 'Su nombre de usuario es requerido!' });
+    minLength(schemaPath.name, 5, { message: "Su nombre de usuario debe ser de mas de 4 caracteres."});
+    maxLength(schemaPath.name, 150, { message: "Su nombre de usuario debe ser de menor a 151 caracteres."});
     required(schemaPath.email, { message: 'Tu correo es requerido' });
     pattern(schemaPath.email,
       /^[a-zA-Z0-9!#\$%&\/\(\)\?¿\\\.\-]{5,}@[A-Za-z0-9]{3,}\.[a-z]{2,}$/,
@@ -109,9 +52,9 @@ export default class Signup {
     );
     required(schemaPath.password, { message: 'Tu contraseña es requerida' });
     pattern(schemaPath.password, /^(?=.*[A-Z])(?=.*\d).{8,255}$/, {
-      message: `El correo debe empezar con mayusculas, tener minusculas y números, y tener al menos 8 caracteres)`,
+      message: `La contraseña debe empezar con mayusculas, tener minusculas y números, y tener al menos 8 caracteres)`,
     })
-    required(schemaPath.repeatedPassword, { message: 'Tienes que verificar tu contraseña' });
+    required(schemaPath.repeatedPassword, { message: 'Repetir la contraseña es obligatorio' });
     validate(schemaPath.repeatedPassword, ({ value, valueOf }) => {
       if (value() === valueOf(schemaPath.password))
         return null;
@@ -121,8 +64,8 @@ export default class Signup {
       }
     });
     required(schemaPath.residenceStateMexico, { message: 'Tienes que seleccionar una opción como estado de residencia en México' });
-    validate(schemaPath.repeatedPassword, ({ value }) => {
-      if (Object.keys(MEXICO_STATES).some((state) => state === value()))
+    validate(schemaPath.residenceStateMexico, ({ value }) => {
+      if (Object.values(MEXICO_STATES).some((state) => state === value()))
         return null;
       return {
         kind: 'State not valid',
@@ -131,7 +74,7 @@ export default class Signup {
     })
     required(schemaPath.gender, { message: 'Tú genero es necesario' });
     validate(schemaPath.gender, ({ value }) => {
-      if (Object.keys(GENDERS).some((gender) => gender === value()))
+      if (Object.values(GENDERS).some((gender) => gender === value()))
         return null;
       return {
         kind: `Gender not valid`,
@@ -164,17 +107,49 @@ export default class Signup {
 
   protected readonly mexicoStates = Object.values(MEXICO_STATES);
   protected readonly genders = Object.values(GENDERS);
-
-
+  protected readonly showError = signal(false);
+  protected readonly errorSignup = signal('');
+  protected readonly isHidingError = signal(false);
+  private hideTimeout: NodeJS.Timeout | null = null;
+  private destroyTimeout: NodeJS.Timeout | null=null;
+  protected readonly isSignedup = signal(false);
+  protected readonly username = signal('');
+  
+  private readonly triggerError = (message: string) => {
+    if(this.hideTimeout) clearTimeout(this.hideTimeout);
+    if(this.destroyTimeout) clearTimeout(this.destroyTimeout);
+    this.errorSignup.set(message);
+    this.showError.set(true);
+    this.isHidingError.set(false);
+    
+    this.hideTimeout = setTimeout(() => this.isHidingError.set(true), 5000);
+    this.destroyTimeout = setTimeout(() => {
+      this.showError.set(false);
+      this.isHidingError.set(false);
+    }, 5500);
+  }
+  
 
   protected readonly onSubmit = (event: Event) => {
     event.preventDefault();
     submit(this.signupForm, {
       action: async () => {
         const signupData = this.signupModel();
-        const resp = await this.signupUser(signupData);
-        console.log({ resp })
+        try{
+            const resp = await this.signupUser(signupData);
+            console.log({resp});
+            //this.isSignedup.set(true);
+            //this.username.set(resp.user.name);
+        } catch( error: unknown) {
+            if( !(error instanceof Error) || error.cause === 'Internal Server Error'){
+                console.log('Enviar server error');
+            }
+            if( error instanceof Error ){
+             this.triggerError(error.message);
+            }
+        }
       }
-    })
+    });
+    
   }
 }

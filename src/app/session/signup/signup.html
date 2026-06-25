@@ -1,7 +1,15 @@
+@if( this.isSignedup() ){
+  <article role="alert" class="alert alert-success z-50 fixed bottom-5 right-5 w-auto shadow-lg transition-all duration-500 ease-in-out"
+    [class.opacity-0]="this.isHidingError()"
+    [class.translate-x-full]="this.isHidingError()">
+    <span>Bienvenido a nuestra comunidad</span>
+  </article>
+}
+
 <section class="flex flex-col w-full h-full place-items-center justify-center gap-10">
   <header class="mt-30 flex flex-col place-items-center gap-7">
     <h2 class="text-3xl text-lime-600 font-bold">Unetenos a Plantmatica</h2>
-    <h3 class="text-2xl text-lime-500 font-light">¡messSe parte de nuestra hermosa comunidad!</h3>
+    <h3 class="text-2xl text-lime-500 font-light">¡Se parte de nuestra hermosa comunidad!</h3>
     <aside class="relative block aspect-9/16 h-30">
       <image-optimized
         [classStyle]="'object-cover'"
@@ -17,48 +25,22 @@
         <legend class="fieldset-legend text-[rgb(88,206,3)] text-2xl">Crear cuenta</legend>
 
         <label for="name" class="label text-[rgb(88,206,3)] text-xl">Nombre de usuario</label>
-        <input
-          id="name"
-          type="text"
-          class="input w-full mb-10 border-0 border-b-2 border-[rgb(98,186,13)] shadow-none bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200"
-          placeholder="John Doe"
-          autocomplete="name"
-          #name
-          [formField]="signupForm.name"
-        />
-
+        <input id="name" type="text" class="input w-full mb-10 border-0 border-b-2 border-[rgb(98,186,13)] shadow-none bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200" placeholder="John Doe" autocomplete="name" #name [formField]="this.signupForm.name" />
+        @if(this.signupForm.name().touched() && this.signupForm.name().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.name().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
+        
         <label for="email" class="label text-[rgb(88,206,3)] text-xl">Correo</label>
-        <input
-          id="email"
-          type="text"
-          class="input w-full mb-10 border-0 border-b-2 border-[rgb(98,186,13)] shadow-none bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200"
-          placeholder="user@example.com"
-          autocomplete="name"
-          #name
-          [formField]="signupForm.email"
-        />
-
+        <input id="email" type="email" class="input w-full mb-10 border-0 border-b-2 border-[rgb(98,186,13)] shadow-none bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200" placeholder="user@example.com" autocomplete="email" #email [formField]="this.signupForm.email" />
+        @if(this.signupForm.email().touched() && this.signupForm.email().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.email().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
+        
         <label for="password" class="label text-[rgb(88,206,3)] text-xl">Contraseña</label>
         <div class="relative w-full mb-10">
-          <input
-            id="password"
-            [type]="isPasswordHidden() ? 'password' : 'text'"
-            class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200"
-            placeholder="••••••••"
-            autocomplete="current-password"
-            #password
-            [formField]="signupForm.password"
-          />
-          <section
-            class="tooltip tooltip-right tooltip-warning"
-            [attr.data-tip]="togglePasswordState()"
-          >
-            <button
-              type="button"
-              (click)="togglePassword(isPasswordHidden)"
-              class="absolute right-2 top-1/2 -translate-y-2/3 btn btn- btn-sm btn-circles"
-              title="Mostrar contraseña"
-            >
+          <input id="password" [type]="isPasswordHidden() ? 'password' : 'text'" class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200" placeholder="••••••••" autocomplete="new-password" #password [formField]="this.signupForm.password" />
+          <section class="tooltip tooltip-right tooltip-warning" [attr.data-tip]="togglePasswordState()">
+            <button type="button" (click)="togglePassword(isPasswordHidden)" class="absolute right-2 top-1/2 -translate-y-2/3 btn btn-sm btn-circle" title="Mostrar contraseña">
               @if (isPasswordHidden()) {
                 <svg class="rounded-4xl aspect-square w-8 fill-white-100" lucideEyeOff />
               } @else {
@@ -67,30 +49,15 @@
             </button>
           </section>
         </div>
-
-        <label for="password" class="label text-[rgb(88,206,3)] text-xl"
-          >Verificar contraseña</label
-        >
+        @if(this.signupForm.password().touched() && this.signupForm.password().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.password().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
+          
+        <label for="repeatedPassword" class="label text-[rgb(88,206,3)] text-xl">Verificar contraseña</label>
         <div class="relative w-full mb-10">
-          <input
-            id="repeatedPassword"
-            [type]="isRepeatedPasswordHidden() ? 'password' : 'text'"
-            class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200"
-            placeholder="••••••••"
-            autocomplete="current-password"
-            #repeatedPassword
-            [formField]="signupForm.repeatedPassword"
-          />
-          <section
-            class="tooltip tooltip-right tooltip-warning"
-            [attr.data-tip]="toggleRepeatedPasswordState()"
-          >
-            <button
-              type="button"
-              (click)="togglePassword(isRepeatedPasswordHidden)"
-              class="absolute right-2 top-1/2 -translate-y-2/3 btn btn- btn-sm btn-circles"
-              title="Mostrar contraseña"
-            >
+          <input id="repeatedPassword" [type]="isRepeatedPasswordHidden() ? 'password' : 'text'" class="input w-full border-0 border-b-2 border-[rgb(98,186,13)] bg-transparent text-slate-900 text-xl transition-colors duration-200 focus:bg-gray-200" placeholder="••••••••" autocomplete="new-password" #repeatedPassword [formField]="this.signupForm.repeatedPassword" />
+          <section class="tooltip tooltip-right tooltip-warning" [attr.data-tip]="toggleRepeatedPasswordState()">
+            <button type="button" (click)="togglePassword(isRepeatedPasswordHidden)" class="absolute right-2 top-1/2 -translate-y-2/3 btn btn-sm btn-circle" title="Mostrar contraseña">
               @if (isRepeatedPasswordHidden()) {
                 <svg class="rounded-4xl aspect-square w-8 fill-white-100" lucideEyeOff />
               } @else {
@@ -99,132 +66,48 @@
             </button>
           </section>
         </div>
-
-        <label for="residenceStateMexico" class="label text-[rgb(88,206,3)] text-xl"
-          >Estado de la republica mexicana</label
-        >
-        <select
-          id="residenceStateMexico"
-          #residenceStateMexico
-          [formField]="signupForm.residenceStateMexico"
-          class="select bg-gray-100 text-lg text-slate-900 mb-10"
-        >
+         @if(this.signupForm.repeatedPassword().touched() && this.signupForm.repeatedPassword().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.repeatedPassword().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
+        
+        <label for="residenceStateMexico" class="label text-[rgb(88,206,3)] text-xl">Estado de la republica mexicana</label>
+        <select id="residenceStateMexico" #residenceStateMexico [formField]="this.signupForm.residenceStateMexico" class="select bg-gray-100 text-lg text-slate-900 mb-10">
           <option disabled selected>Selecciona un estado</option>
-
           @for (state of mexicoStates; track $index) {
             <option class="transition-colors duration-200 hover:bg-gray-300">
               {{ state | titlecase }}
             </option>
           }
         </select>
-
+         @if(this.signupForm.residenceStateMexico().touched() && this.signupForm.residenceStateMexico().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.residenceStateMexico().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }   
+        
         <label for="gender" class="label text-[rgb(88,206,3)] text-xl">Sexo</label>
-        <select
-          id="gender"
-          #gender
-          [formField]="signupForm.gender"
-          class="select bg-gray-100 text-lg text-slate-900 mb-10"
-        >
+        <select id="gender" #gender [formField]="this.signupForm.gender" class="select bg-gray-100 text-lg text-slate-900 mb-10">
           <option disabled selected>Selecciona un género</option>
           @for (gender of genders; track $index) {
-            <option class="transition-colors duration-200 hover:bg-gray-300 text-slate-900">
+            <option class="transition-colors duration-200 hover:bg-gray-300 text-slate-900" [value]="gender">
               {{ gender | translateGender | titlecase }}
             </option>
           }
         </select>
+        @if(this.signupForm.gender().touched() && this.signupForm.gender().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.gender().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
 
-        <label for="birthdate" class="label text-[rgb(88,206,3)] text-xl"
-          >Fecha de nacimiento</label
-        >
-        <input
-          id="birthdate"
-          #birthdate
-          [formField]="signupForm.birthdate"
-          type="date"
-          class="input bg-gray-400 text-lg text-slate-900 mb-10"
-        />
+        <label for="birthdate" class="label text-[rgb(88,206,3)] text-xl">Fecha de nacimiento</label>
+        <input id="birthdate" #birthdate [formField]="this.signupForm.birthdate" type="date" class="input bg-gray-400 text-lg text-slate-900 mb-10" />
+        @if(this.signupForm.birthdate().touched() && this.signupForm.birthdate().invalid()){
+            <p class="text-[rgb(250,27,27)] mb-5">{{this.signupForm.birthdate().errors().map(error=>(error.message)).join(', \n')}}</p>
+        }
 
         <article class="flex flex-col place-items-center gap-7">
-          <button
-            class="btn btn-wide text-lg border-[rgba(99,164,63,0.9)] bg-[rgba(99,164,63,0.9)] transition-all duration-400 hover:scale-120 hover:bg-[rgb(98,186,13)]"
-            (click)="trackingModal.showModal()"
-          >
+          <button type="button" class="btn btn-wide text-lg border-[rgba(99,164,63,0.9)] bg-[rgba(99,164,63,0.9)] transition-all duration-400 hover:scale-120 hover:bg-[rgb(98,186,13)]" (click)="permissionsModal.showModal()">
             Terminos y condiciones
           </button>
-          <dialog id="trackingModal" #trackingModal class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box bg-gray-100 text-gray-900">
-              <h3 class="text-xl font-bold">Aviso de privacidad y términos de uso.</h3>
-              <p class="py-4 text-lg">
-                Tucan’s Software es el responsable del uso y protección de sus datos personales, y
-                al respecto le informamos lo siguiente. De manera adicional, utilizaremos su
-                información personal para las siguientes finalidades secundarias que no son
-                necesarias para el servicio solicitado, pero que nos permiten y facilitan brindarle
-                una mejor atención:
-              </p>
-              <div class="flex flex-col place-items-left gap-5 text-lg">
-                <label class="label font-normal text-slate-800">
-                  <input
-                    id="isAgeAllowed"
-                    #isAgeAllowed
-                    [formField]="signupForm.tracking.isAgeAllowed"
-                    type="checkbox"
-                    class="checkbox bg-gray-800"
-                  />
-                  Edad
-                </label>
-                <label class="label font-normal text-slate-800">
-                  <input
-                    id="isStateAllowed"
-                    #isStateAllowed
-                    [formField]="signupForm.tracking.isStateAllowed"
-                    type="checkbox"
-                    class="checkbox bg-gray-800"
-                  />
-                  Ubicación (Estado de la república mexicana )
-                </label>
-                <label class="label font-normal text-slate-800">
-                  <input
-                    id="isGenderAllowed"
-                    #isGenderAllowed
-                    [formField]="signupForm.tracking.isGenderAllowed"
-                    type="checkbox"
-                    class="checkbox bg-gray-800"
-                  />
-                  Género
-                </label>
-                <label class="label font-normal text-slate-800">
-                  <input
-                    id="isMarketingAllowed"
-                    #isMarketingAllowed
-                    [formField]="signupForm.tracking.isMarketingAllowed"
-                    type="checkbox"
-                    class="checkbox bg-gray-800"
-                  />
-                  Mercadotecnía (correos de promoción y anuncios de nuestros promotores)
-                </label>
-                <label class="label font-normal text-slate-800">
-                  <input
-                    id="isAdsAllowed"
-                    #isAdsAllowed
-                    [formField]="signupForm.tracking.isAdsAllowed"
-                    type="checkbox"
-                    class="checkbox bg-gray-800"
-                  />
-                  Ṕrospección comercial (Anuncios personalizados)
-                </label>
-              </div>
-              <div class="modal-action">
-                <form method="dialog">
-                  <button class="btn">Close</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-          <button
-            type="submit"
-            [disabled]="signupForm().invalid()"
-            class="btn w-[60%] text-lg border-[rgba(99,164,63,0.9)] bg-[rgba(99,164,63,0.9)] transition-all duration-400 hover:scale-120 hover:bg-[rgb(98,186,13)]"
-          >
+          
+          <button type="submit" class="btn w-[60%] text-lg border-[rgba(99,164,63,0.9)] bg-[rgba(99,164,63,0.9)] transition-all duration-400 hover:scale-120 hover:bg-[rgb(98,186,13)]">
             Crear Cuenta
           </button>
         </article>
@@ -232,13 +115,52 @@
     </form>
   </article>
 
+  <dialog id="permissionsModal" #permissionsModal class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box bg-gray-100 text-gray-900">
+      <h3 class="text-xl font-bold">Aviso de privacidad y términos de uso.</h3>
+      <p class="py-4 text-lg">
+        Tucan’s Software es el responsable del uso y protección de sus datos personales...
+      </p>
+      <div class="flex flex-col place-items-left gap-5 text-lg">
+        <label class="label font-normal text-slate-800">
+          <input id="isAgeAllowed" #isAgeAllowed [formField]="this.signupForm.isAgeAllowed" type="checkbox" class="checkbox bg-gray-800" />
+          Edad
+        </label>
+        <label class="label font-normal text-slate-800">
+          <input id="isStateAllowed" #isStateAllowed [formField]="this.signupForm.isStateAllowed" type="checkbox" class="checkbox bg-gray-800" />
+          Ubicación (Estado de la república mexicana)
+        </label>
+        <label class="label font-normal text-slate-800">
+          <input id="isGenderAllowed" #isGenderAllowed [formField]="this.signupForm.isGenderAllowed" type="checkbox" class="checkbox bg-gray-800" />
+          Género
+        </label>
+        <label class="label font-normal text-slate-800">
+          <input id="isMarketingAllowed" #isMarketingAllowed [formField]="this.signupForm.isMarketingAllowed" type="checkbox" class="checkbox bg-gray-800" />
+          Mercadotecnía
+        </label>
+        <label class="label font-normal text-slate-800">
+          <input id="isAdsAllowed" #isAdsAllowed [formField]="this.signupForm.isAdsAllowed" type="checkbox" class="checkbox bg-gray-800" />
+          Prospección comercial
+        </label>
+      </div>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
   <footer class="flex flex-col w-full h-full place-items-center justify-center gap-5 mb-20">
-    <button
-      routerLink="/session/login"
-      type="submit"
-      class="btn btn-ghost btn-link text-slate-800 transition-all duration-500 hover:scale-125 hover:text-[rgb(98,186,13)]"
-    >
+    <button routerLink="/login" type="button" class="btn btn-ghost btn-link text-slate-800 transition-all duration-500 hover:scale-125 hover:text-[rgb(98,186,13)]">
       Si ya posees una cuenta puedes iniciar sesión haciendo click aqui.
     </button>
+    @if( this.showError() ){
+      <article role="alert" class="alert alert-error alert-soft z-50 fixed bottom-5 right-5 w-auto shadow-lg transition-all duration-500 ease-in-out"
+        [class.opacity-0]="this.isHidingError()"
+        [class.translate-x-full]="this.isHidingError()">
+        <span>{{ this.errorSignup() }}</span>
+      </article>
+    }
   </footer>
 </section>

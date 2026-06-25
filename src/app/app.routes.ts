@@ -3,7 +3,8 @@ import Homepage from './homepage/homepage';
 import Cards from './cards/cards';
 import Admin from './admin/admin';
 import User from './user/user';
-import SessionRoutes from './session/session.routes';
+import Login from './session/login/login';
+import Signup from './session/signup/signup';
 
 export const routes: Routes = [
   {
@@ -15,8 +16,12 @@ export const routes: Routes = [
     loadComponent: () => Cards,
   },
   {
-    path: 'session',
-    loadChildren: () => SessionRoutes,
+    path: 'login',
+    loadComponent: () => Login,
+  },
+  {
+    path: 'signup',
+    loadComponent: () => Signup,
   },
   {
     path: 'admin',

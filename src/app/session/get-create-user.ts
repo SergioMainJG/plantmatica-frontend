@@ -1,29 +1,17 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, catchError, throwError } from 'rxjs';
 import { Temporal } from 'temporal-polyfill';
-
-interface SignupFormModel {
-  birthdate: string;
-  email: string;
-  gender: string;
-  name: string;
-  password: string;
-  repeatedPassword: string;
-  residenceStateMexico: string;
-  tracking: {
-    isAgeAllowed: boolean;
-    isStateAllowed: boolean;
-    isGenderAllowed: boolean;
-    isMarketingAllowed: boolean;
-    isAdsAllowed: boolean;
-  }
-}
+import { type } from 'arktype';
+import { UserAuthenticated } from '../../core/users/user-authenticated';
+import { UserRegisterData } from '../../core/users/user-register-data';
+import { DuplicatedUserError, DuplicatedUserErrorInstance } from '../../core/errors/duplicated-user.error';
+import { InternalServerError, InternalServerErrorInstance } from '../../core/errors/internal-server.error';
+import { BadRequestError, BadRequestErrorInstance } from '../../core/errors/bad-request.error';
 
 @Service()
-export default class GetAndCreateUser {
+export default class UserAuthentication {
   private readonly http = inject(HttpClient);
-
   public readonly loginUser = (credential: string, password: string) => {
     const req = this.http.post(`/users/login`, {
       credential,
@@ -33,14 +21,29 @@ export default class GetAndCreateUser {
     return firstValueFrom(req);
   }
 
-  public readonly signUpUser = (userData: SignupFormModel) => {
-    const req = this.http.post('/users/register', {
-      birthdate: Temporal.PlainDate.from(userData.birthdate),
-      email: userData.email,
-      gender: userData.gender,
-      name: userData.name,
-      password: userData.password,
-      residenceState: userData.residenceStateMexico,
-    })
+  public readonly signUpUser = (userData: UserRegisterData): Promise<UserAuthenticated> => {
+    const req = this.http.post<UserAuthenticated>('/users/register', userData)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          if( err.status === 409 ){
+            const duplicatedError  = DuplicatedUserErrorInstance(err.error);
+            if( !(duplicatedError instanceof type.errors) )
+              throw new DuplicatedUserError(duplicatedError.message, {cause: duplicatedError.cause}); 
+          }
+          
+         if( err.status === 400 ){
+            const badRequestError  = BadRequestErrorInstance(err.error);
+            if( !(badRequestError instanceof type.errors) )
+              throw new BadRequestErrorInstance(badRequestError.message, {cause: badRequestError.cause}); 
+          }
+        
+          const internalServerError = InternalServerErrorInstance(err.error);  
+          if( internalServerError instanceof type.errors )
+            throw new InternalServerError('Internal Server Error', {cause: 'Internal Server Error'});
+          throw new InternalServerError(internalServerError.message, { cause: internalServerError.cause});          
+        }),
+    );
+    const reqValidated = UserAuthenticated(req) as UserAuthenticated ;
+    return firstValueFrom(req);
   }
 }

@@ -10,23 +10,19 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
-    path: 'session',
-    renderMode: RenderMode.Server,
+    path: 'login',
+    renderMode: RenderMode.Prerender,
   },
   {
-    path: 'session/login',
-    renderMode: RenderMode.Server
-  },
-  {
-    path: 'session/signup',
-    renderMode: RenderMode.Server
+    path: 'signup',
+    renderMode: RenderMode.Prerender,
   },
   {
     path: 'admin',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Server,
   },
   {
     path: 'user',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Server,
   }
 ];
